@@ -23,31 +23,62 @@ import { RolePermisson } from "../models/rolepermission.model";
 
 // console.log(models);
 dotenv.config();
+const databaseUrl = process.env.DATABASE_URL;
 
-export const sequelize = new Sequelize({
-  dialect: "postgres",
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  models: [
-    User,
-    OTP,
-    Product,
-    Category,
-    Warehouse,
-    Warehouseaddresses,
-    Addresses,
-    Stocks,
-    Payments,
-    Stockalerts,
-    Stocktransactions,
-    Purchaseorders,
-    Salesorders,
-    Roles,
-    Permission,
-    userRole,
-    RolePermisson,
-  ],
-  logging: false,
-});
+export const sequelize = databaseUrl
+  ? new Sequelize(databaseUrl, {
+      dialect: "postgres",
+      models: [
+        User,
+        OTP,
+        Product,
+        Category,
+        Warehouse,
+        Warehouseaddresses,
+        Addresses,
+        Stocks,
+        Payments,
+        Stockalerts,
+        Stocktransactions,
+        Purchaseorders,
+        Salesorders,
+        Roles,
+        Permission,
+        userRole,
+        RolePermisson,
+      ],
+      logging: false,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
+    })
+  : new Sequelize({
+      dialect: "postgres",
+      host: process.env.DB_HOST,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      models: [
+        User,
+        OTP,
+        Product,
+        Category,
+        Warehouse,
+        Warehouseaddresses,
+        Addresses,
+        Stocks,
+        Payments,
+        Stockalerts,
+        Stocktransactions,
+        Purchaseorders,
+        Salesorders,
+        Roles,
+        Permission,
+        userRole,
+        RolePermisson,
+      ],
+      logging: false,
+    });
