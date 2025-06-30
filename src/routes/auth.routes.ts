@@ -1,6 +1,7 @@
 // import { Express } from "express";
 import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
+import { signupvalidation } from "../middlewares/validation";
 
 const router = Router();
 
@@ -69,7 +70,7 @@ router.post("/permission", authController.Permission);
  *                     type: string
  */
 
-router.post("/signup", authController.create);
+router.post("/signup", signupvalidation.signupschema, authController.create);
 /**
  * @swagger
  * /verifyotp:
@@ -164,7 +165,7 @@ router.post("/signup", authController.create);
  *         description: Internal server error
  */
 
-router.post("/verifyotp", authController.verify);
+router.post("/verifyotp", signupvalidation.OTP, authController.verify);
 /**
  * @swagger
  * /login:
@@ -248,7 +249,7 @@ router.post("/verifyotp", authController.verify);
  *         description: Internal server error
  */
 
-router.post("/login", authController.login);
+router.post("/login", signupvalidation.login, authController.login);
 /**
  * @swagger
  * /update/{id}:

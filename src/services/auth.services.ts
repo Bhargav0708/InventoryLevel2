@@ -179,9 +179,11 @@ export const authService = {
     //role checking
     const Rolechecking = await authRepository.getrole(email);
     if (Array.isArray(role)) {
-      Role_match = role.includes(Rolechecking!);
+      // Role_match = role.includes(Rolechecking.includes());
+      Role_match = role.some((r) => Rolechecking.includes(r));
     } else {
-      Role_match = role == Rolechecking;
+      // Role_match = role == Rolechecking;
+      Role_match = Rolechecking.includes(role);
     }
     if (!Role_match) {
       throw new customError(

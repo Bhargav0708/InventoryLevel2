@@ -279,40 +279,79 @@ export const authRepository = {
       return deleted_User;
     }
   },
-  async getrole(email: string) {
+  // async getrole(email: string) {
+  //   try {
+  //     const userid = await User.findOne({
+  //       where: {
+  //         email: email,
+  //       },
+  //     });
+  //     if (userid) {
+  //       const id = userid.id;
+  //       const userrole = await userRole.findOne({
+  //         where: {
+  //           userid: id,
+  //         },
+  //       });
+  //       if (userrole) {
+  //         const roleid = userrole.roleid;
+  //         const role = await Roles.findOne({
+  //           where: {
+  //             roleid: roleid,
+  //           },
+  //         });
+  //         if (role) {
+  //           const role_name = role.role_name;
+  //           return role_name;
+  //         }
+  //       }
+  //     } else {
+  //       throw new customError("YOUR_ROLE_NOT_FOUND", "Your role is not found");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     if (error instanceof customError) {
+  //       throw error;
+  //     }
+  //   }
+  // },
+  async getrole(email: string): Promise<string[]> {
     try {
-      const userid = await User.findOne({
-        where: {
-          email: email,
-        },
-      });
-      if (userid) {
-        const id = userid.id;
-        const userrole = await userRole.findOne({
-          where: {
-            userid: id,
-          },
-        });
-        if (userrole) {
-          const roleid = userrole.roleid;
-          const role = await Roles.findOne({
-            where: {
-              roleid: roleid,
-            },
-          });
-          if (role) {
-            const role_name = role.role_name;
-            return role_name;
-          }
-        }
-      } else {
-        throw new customError("YOUR_ROLE_NOT_FOUND", "Your role is not found");
+      const user = await User.findOne({ where: { email } });
+
+      if (!user) {
+        throw new customError("USER_NOT_FOUND", "User not found");
       }
+
+      const userRoles = await userRole.findAll({
+        where: { userid: user.id },
+      });
+
+      if (!userRoles || userRoles.length === 0) {
+        throw new customError(
+          "ROLE_NOT_FOUND",
+          "No roles assigned to the user"
+        );
+      }
+
+      const roleIds = userRoles.map((ur) => ur.roleid);
+
+      const roles = await Roles.findAll({
+        where: { roleid: roleIds },
+      });
+
+      const roleNames = roles.map((r) => r.role_name);
+
+      return roleNames;
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching roles:", error);
       if (error instanceof customError) {
         throw error;
       }
+      throw new customError(
+        "INTERNAL_ERROR",
+        "Something went wrong while fetching roles"
+      );
     }
   },
 };
