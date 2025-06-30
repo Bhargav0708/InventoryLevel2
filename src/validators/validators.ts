@@ -58,13 +58,16 @@ export const signupjoischema = Joi.object({
       "any.required": "Role is required",
     }),
 
-  customertype: Joi.string().when("role", {
-    is: "customer",
-    then: Joi.required().messages({
-      "any.required": "Customer type is required when role is customer",
+  customertype: Joi.string()
+    .valid("individual", "business")
+    .when("role", {
+      is: "customer",
+      then: Joi.required().messages({
+        "any.only": "Customer type must be either 'individual' or 'business'",
+        "any.required": "Customer type is required when role is customer",
+      }),
+      otherwise: Joi.optional(),
     }),
-    otherwise: Joi.optional(),
-  }),
 });
 
 export const OTPSchema = Joi.object({

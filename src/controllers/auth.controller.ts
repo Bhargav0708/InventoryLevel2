@@ -246,7 +246,7 @@ export const authController = {
   async getllUsers(req: Request, res: Response) {
     try {
       const AllUsers = await authService.getAll();
-      res.status(200).json({ data: AllUsers, msg: "All categoties" });
+      res.status(200).json({ data: AllUsers, msg: "All Users" });
     } catch (error) {
       console.log(error);
     }
