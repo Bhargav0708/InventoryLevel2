@@ -243,5 +243,13 @@ export const authController = {
       }
     }
   },
+  async getllUsers(req: Request, res: Response) {
+    try {
+      const AllUsers = await authService.getAll();
+      res.status(200).json({ data: AllUsers, msg: "All categoties" });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 // {

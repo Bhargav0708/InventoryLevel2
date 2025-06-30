@@ -293,6 +293,10 @@ export const authService = {
       }
     }
   },
+  async getAll() {
+    const all_users = await authRepository.getAll();
+    return all_users;
+  },
   async delete(id: number) {
     const deleteduser = await authRepository.delete(id);
     return deleteduser;

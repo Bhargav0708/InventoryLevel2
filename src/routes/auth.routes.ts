@@ -417,6 +417,7 @@ router.put("/update/:id", authController.update);
  *         description: Internal server error
  */
 
+router.get("/allusers", authController.getllUsers);
 router.delete("/delete/:id", authController.delete);
 
 export default router;

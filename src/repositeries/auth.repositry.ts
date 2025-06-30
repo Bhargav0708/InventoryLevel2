@@ -354,4 +354,7 @@ export const authRepository = {
       );
     }
   },
+  async getAll() {
+    return await User.findAll();
+  },
 };
